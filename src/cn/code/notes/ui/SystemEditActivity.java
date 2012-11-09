@@ -24,6 +24,7 @@ public class SystemEditActivity extends PreferenceActivity implements
 	public static final String PREFERENCE_SYNC_ACCOUNT_KEY = "pref_sync_account_key";
 
 	public Preference mAccountPreference;
+
 	private boolean isCancel = false;
 	private String mAccountUserId = "";
 
@@ -33,6 +34,7 @@ public class SystemEditActivity extends PreferenceActivity implements
 
 		addPreferencesFromResource(R.xml.system_edit);
 		mAccountPreference = (Preference) findPreference(PREFERENCE_SYNC_ACCOUNT_NAME);
+
 		WizApiEventsListener.add(this);
 	}
 
@@ -87,6 +89,8 @@ public class SystemEditActivity extends PreferenceActivity implements
 		Intent intent = new Intent();
 		intent.setClass(this, WelcomeActivity.class);
 		startActivityForResult(intent, WIZ_SETUP_ACCOUNT);
+		overridePendingTransition(android.R.anim.fade_in,
+				android.R.anim.fade_out);
 	}
 
 	@Override

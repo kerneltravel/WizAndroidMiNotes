@@ -191,11 +191,15 @@ public class WorkingNote {
 					Log.e(TAG, "Create new note fail with id:" + mNoteId);
 					return false;
 				}
+
 				iniConnectValue();
+
 			} else {
 				mNote.setNoteLongValue();
 			}
+
 			mNote.syncNote(mContext, mNoteId);
+
 			/**
 			 * Update widget content if there exist any widget of this note
 			 */
@@ -265,16 +269,15 @@ public class WorkingNote {
 		mNoteSettingStatusListener = l;
 	}
 
-	// 设置提醒时间
 	public void setAlertDate(long date, boolean set) {
 		if (date != mAlertDate) {
 			mAlertDate = date;
 			mNote.setNoteValue(NoteColumns.ALERTED_DATE,
 					String.valueOf(mAlertDate));
-			
 		}
 		if (mNoteSettingStatusListener != null) {
-			mNoteSettingStatusListener.onClockAlertChanged(date, set);
+			mNoteSettingStatusListener.onClockAlertChanged(date, set);// set = true
+																		
 		}
 	}
 

@@ -20,6 +20,7 @@ public class WizDocument implements Comparable<WizDocument> {
 	public long version;
 	public boolean isEncryption;
 
+	//
 	public WizDocument() {
 		attachmentCount = 0;
 		serverChanged = 0;
@@ -33,6 +34,7 @@ public class WizDocument implements Comparable<WizDocument> {
 		if (title == null || another.title == null) {
 			return cmp2.compare(dateModified, another.dateModified);
 		}
+		//
 		return cmp2.compare(title, another.title);
 	}
 

@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cn.code.notes.R;
+
 import android.content.Context;
-import android.os.Message;
+
 import redstone.xmlrpc.XmlRpcArray;
 import redstone.xmlrpc.XmlRpcClient;
 import redstone.xmlrpc.XmlRpcException;
@@ -277,6 +278,7 @@ public class WizApi {
 		msg.obj = syncMessage;
 		msg.arg1 = 0;
 		msg.arg2 = stringId;
+		//
 		mHandler.sendMessage(msg);
 	}
 
@@ -291,7 +293,7 @@ public class WizApi {
 	}
 
 	void sendBeginMessage() {
-		Message msg = new Message();
+		android.os.Message msg = new android.os.Message();
 		msg.what = Api_Begin;
 		msg.obj = "Api begin";
 		msg.arg1 = 0;
@@ -764,7 +766,6 @@ public class WizApi {
 		}
 	}
 
-	// 下载所有数据
 	boolean downloadAllData(ArrayList<WizDocument> arr) {
 		try {
 			if (arr != null) {
@@ -995,6 +996,7 @@ public class WizApi {
 	}
 
 	Object downloadDocument(WizDocument doc) {
+
 		if (doc == null)
 			return null;
 		String mGUID = doc.guid;
@@ -1013,18 +1015,13 @@ public class WizApi {
 			String md5 = WizGlobals.makeMD5ForFile(new_file_name);
 
 			if (WizSQLite.isDocumentServerChanged(mContext, mGUID, md5)) {
-
 				if (!WizGlobals.unZipDocumentData(mContext, mAccountUserId,
-						dataFile, mGUID)) {
+						dataFile, mGUID))
 					return null;
-				}
-
-				// 保存内容
-
-				WizSQLite.UpdateDocumentMd5(mContext, mGUID, md5);
 				WizGlobals.saveNote(mContext, doc);
-
+				WizSQLite.UpdateDocumentMd5(mContext, mGUID, md5);
 			}
+
 			return "dataGuid";
 		} catch (Exception e) {
 			return onXmlRpcFailed(e);
@@ -1034,6 +1031,7 @@ public class WizApi {
 					mGUID);
 			WizGlobals.deleteDirectory(docFilePath);
 		}
+
 	}
 
 	Object downloadAttachment(WizAttachment att) {
@@ -1234,9 +1232,9 @@ public class WizApi {
 			String mCurrentGuid = doc.guid;
 			if (WizGlobals.isEmptyString(mCurrentGuid))
 				return null;
+
 			File zipFile = WizGlobals.getDocZipFile(mContext, mAccountUserId,
 					doc);
-
 			if (zipFile == null)
 				return null;
 
@@ -1310,9 +1308,11 @@ public class WizApi {
 			e.printStackTrace();
 			return null;
 		} finally {
+
 			/* 删除临时文件夹及其子文件 */
 			WizGlobals.deleteDirectory(newFolderName);
 		}
+
 		return zipFile;
 	}
 

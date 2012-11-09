@@ -8,9 +8,7 @@ public abstract class WizXmlRpcThread extends Thread {
 	public WizXmlRpcThread(Context ctx, String accountUserId, String password,
 			String actionName) {
 		WizApiHandler handler = new WizApiHandler(accountUserId, actionName);
-
 		mApi = new WizApi(ctx, accountUserId, password, handler);
-
 	}
 
 	public void run() {

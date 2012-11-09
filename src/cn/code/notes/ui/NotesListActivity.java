@@ -709,10 +709,7 @@ public class NotesListActivity extends Activity implements OnClickListener,
 			getMenuInflater().inflate(R.menu.note_list, menu);
 			menu.findItem(R.id.menu_sync).setTitle(
 					isSync() ? R.string.menu_sync_cancel : R.string.menu_sync);
-			// menu.findItem(R.id.menu_sync).setTitle(
-			// GTaskSyncService.isSyncing() ? R.string.menu_sync_cancel
-			// : R.string.menu_sync);
-			// menu.findItem(R.id.menu_search).setVisible(false);
+
 		} else if (mState == ListEditState.SUB_FOLDER) {
 			getMenuInflater().inflate(R.menu.sub_folder, menu);
 		} else if (mState == ListEditState.CALL_RECORD_FOLDER) {
@@ -738,7 +735,8 @@ public class NotesListActivity extends Activity implements OnClickListener,
 			if (!WizGlobals.isEmptyString(mAccountUserId)) {
 				sync();
 			} else {
-				startPreferenceActivity();
+				// startPreferenceActivity();
+				startWelcomeActivity();
 			}
 			break;
 		}
@@ -754,6 +752,14 @@ public class NotesListActivity extends Activity implements OnClickListener,
 			break;
 		}
 		return true;
+	}
+
+	private void startWelcomeActivity() {
+		Intent intent = new Intent();
+		intent.setClass(getApplicationContext(), WelcomeActivity.class);
+		startActivity(intent);
+		overridePendingTransition(android.R.anim.fade_in,
+				android.R.anim.fade_out);
 	}
 
 	// 开启搜索

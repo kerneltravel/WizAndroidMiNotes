@@ -129,6 +129,7 @@ public class WizSQLite {
 			cursor.close();
 		}
 		return "";
+
 	}
 
 	long getLongValue(Uri uri, String selection, String[] selectionArgs,
@@ -253,6 +254,7 @@ public class WizSQLite {
 					arr.add(currentDoc);
 				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -421,20 +423,11 @@ public class WizSQLite {
 		return sql.deleteDocument(selection, selectionArgs);
 	}
 
-	
 	static public String getHtmlText(Context ctx, String selection,
 			String[] selectionArgs) {
 		WizSQLite sql = new WizSQLite(ctx);
 		Uri uri = Notes.CONTENT_NOTE_URI;
 		return sql.getStringValue(uri, selection, selectionArgs, 8);
-	}
-
-	
-	public static String getAlertTime(Context ctx, String selection,
-			String[] selectionArgs) {
-		WizSQLite sql = new WizSQLite(ctx);
-		Uri uri = Notes.CONTENT_NOTE_URI;
-		return sql.getStringValue(uri, selection, selectionArgs, 2);
 	}
 
 	static public boolean updateTaskInfo(Context ctx, long id) {

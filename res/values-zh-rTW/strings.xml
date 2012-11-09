@@ -86,7 +86,7 @@
     <string name="preferences_title">設置</string>
     <string name="preferences_account_title">同步賬號</string>
     <string name="preferences_account_summary">与google task同步便簽記錄</string>
-    <string name="preferences_account_summary_wiz">与Wiz 為知用戶“%1$s”同步便簽記錄</string>
+    <string name="preferences_account_summary_wiz">与Wiz 為知同步便簽記錄</string>
     <string name="preferences_last_sync_time">上次同步于 %1$s</string>
     <string name="preferences_last_sync_time_format">yyyy-MM-dd hh:mm:ss</string>
     <string name="preferences_add_account">添加賬號</string>
@@ -156,8 +156,8 @@
     <string name="wait_for_login">正在登錄，請稍候...</string>
     <string name="message_enter_user_id">請輸入帳號!</string>
     <string name="message_enter_password">請輸入密碼!</string>
-    <string name="message_enter_confirm_password">請輸入確認密碼!</string>
-    <string name="password_does_not_match">您輸入的密碼不匹配!</string>
+    <string name="message_enter_confirm_password">請再次輸入密碼</string>
+    <string name="password_does_not_match">兩次密碼不一致!</string>
     <string name="create_new_account">創建新的帳號</string>
     <string name="account_with_cerate">註冊</string>
     <string name="wiz_button_back">返回</string>

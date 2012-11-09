@@ -20,15 +20,14 @@ public class WizApiEventsListener implements WizApiEvents {
 			return;
 		mListener.remove(index);
 	}
-	
-	
+
 	public void onApiBegin(String userId, String actionName) {
 
 		if (actionName.equals("WizSync")) {
 			WizGlobalData.sharedData().setSyncing(userId, true);
 		}
 
-		for (int i = 0; i < mListener.size(); i++) {  
+		for (int i = 0; i < mListener.size(); i++) {
 			mListener.get(i).onApiBegin(userId, actionName);
 		}
 	}
@@ -42,7 +41,7 @@ public class WizApiEventsListener implements WizApiEvents {
 	}
 
 	public void onApiEnd(String userId, String actionName, boolean succeeded) {
-
+		
 		if (actionName.equals("WizSync")) {
 			WizGlobalData.sharedData().setSyncing(userId, false);
 		}

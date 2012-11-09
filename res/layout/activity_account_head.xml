@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="2dip"
-            android:src="@drawable/icon_back_welcome" />
+            android:src="@drawable/icon_back" />
 
         <TextView
             android:id="@+id/headerTitle"
@@ -26,8 +26,8 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:textSize="18dip"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="18dip" />
 
         <ImageView
             android:layout_width="wrap_content"

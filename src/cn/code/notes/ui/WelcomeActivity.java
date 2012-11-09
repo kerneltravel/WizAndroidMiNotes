@@ -18,6 +18,7 @@ public class WelcomeActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_welcome);
 		getLoginButton().setOnClickListener(this);
 		getCreateButton().setOnClickListener(this);
+		//
 	}
 
 	@Override
@@ -62,11 +63,15 @@ public class WelcomeActivity extends Activity implements OnClickListener {
 		case REQ_LOGIN_ACCOUNTS:
 			Intent intent = new Intent(this, WizAccountLoginActivity.class);
 			startActivityForResult(intent, REQ_LOGIN_ACCOUNTS);
+			overridePendingTransition(android.R.anim.fade_in,
+					android.R.anim.fade_out);
 			break;
 
 		case REQ_CREATE_ACCOUNTS:
 			Intent it2 = new Intent(this, WizAccountCreateActivity.class);
-			startActivityForResult(it2, REQ_CREATE_ACCOUNTS);//
+			startActivityForResult(it2, REQ_CREATE_ACCOUNTS);
+			overridePendingTransition(android.R.anim.fade_in,
+					android.R.anim.fade_out);
 			break;
 		}
 	}

@@ -7,7 +7,7 @@
             android:summary="@string/preferences_account_summary_wiz"
             android:title="@string/preferences_account_title" />
     </PreferenceCategory>
-    
+   
     <PreferenceCategory>
         <CheckBoxPreference
             android:defaultValue="false"

@@ -3,10 +3,12 @@ package cn.code.notes.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +37,7 @@ public class WizAccountLoginActivity extends Activity implements WizApiEvents {
 		setContentView(R.layout.activity_account_login);
 		rSetLinearLayoutView();
 
-		// getButtonBack().setOnClickListener(onBackButtonClick);
+		getButtonBack().setOnClickListener(onBackButtonClick);
 		getLoginButton().setOnClickListener(onLoginButtonClick);
 
 		WizApiEventsListener.add(this);
@@ -66,9 +68,9 @@ public class WizAccountLoginActivity extends Activity implements WizApiEvents {
 					MaxWidthLinearLayout.MAX_WIDTH);
 		}
 
-//		getHeaderTitle().setText(
-//				WizGlobals
-//						.getResourcesString(this, R.string.account_with_login));
+		getHeaderTitle().setText(
+				WizGlobals
+						.getResourcesString(this, R.string.account_with_login));
 	}
 
 	LinearLayout getLoginLinearLayout() {
@@ -173,6 +175,18 @@ public class WizAccountLoginActivity extends Activity implements WizApiEvents {
 	OnClickListener onBackButtonClick = new OnClickListener() {
 
 		public void onClick(View v) {
+			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+					.hideSoftInputFromWindow(WizAccountLoginActivity.this
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			overridePendingTransition(android.R.anim.slide_in_left,
+					android.R.anim.fade_out);
 			finish();
 		}
 	};

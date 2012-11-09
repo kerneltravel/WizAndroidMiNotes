@@ -42,10 +42,6 @@ public class DateTimePickerDialog extends AlertDialog implements
 		void OnDateTimeSet(AlertDialog dialog, long date);
 	}
 
-	// public interface OnDateTimeSetListener1{
-	// void OnDateTimeSet(long date);
-	// }
-
 	public DateTimePickerDialog(Context context, long date) {
 		super(context);
 		int version = Integer.valueOf(android.os.Build.VERSION.SDK);
@@ -92,7 +88,6 @@ public class DateTimePickerDialog extends AlertDialog implements
 					});
 			mDate.setTimeInMillis(date);
 			mDate.set(Calendar.SECOND, 0);
-
 			setButton(context.getString(R.string.datetime_dialog_ok), this);
 			setButton2(context.getString(R.string.datetime_dialog_cancel),
 					(OnClickListener) null);

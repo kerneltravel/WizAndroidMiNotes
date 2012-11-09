@@ -370,9 +370,8 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 						.setText(R.string.note_alert_expired);
 			} else {
 				mNoteHeaderHolder.tvAlertDate.setText(DateUtils
-						.getRelativeTimeSpanString(
-								mWorkingNote.getAlertDate() + 60000, time,
-								DateUtils.MINUTE_IN_MILLIS));
+						.getRelativeTimeSpanString(mWorkingNote.getAlertDate(),
+								time, DateUtils.MINUTE_IN_MILLIS));
 			}
 			mNoteHeaderHolder.tvAlertDate.setVisibility(View.VISIBLE);
 			mNoteHeaderHolder.ivAlertIcon.setVisibility(View.VISIBLE);
@@ -470,6 +469,14 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 			mFontSizeId = ResourceParser.BG_DEFAULT_FONT_SIZE;
 		}
 		mEditTextList = (LinearLayout) findViewById(R.id.note_edit_list);
+		// Intent intent = getIntent();
+		// if (intent != null) {
+		// String content = intent.getStringExtra("smsContent");
+		// if (content != null) {
+		// mNoteEditor.setVisibility(android.view.View.VISIBLE);
+		// mNoteEditor.setText(content);
+		// }
+		// }
 	}
 
 	@Override
@@ -663,7 +670,6 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 	private void setReminder() {
 		DateTimePickerDialog d = new DateTimePickerDialog(this,
 				System.currentTimeMillis());
-
 		d.setOnDateTimeSetListener(new OnDateTimeSetListener() {
 			public void OnDateTimeSet(AlertDialog dialog, long date) {
 				mWorkingNote.setAlertDate(date, true);
@@ -696,7 +702,41 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 		startActivity(intent);
 	}
 
-	// 提醒时间改变时调用该方法,并发送广播
+	// public void deleteCurrentNote(Context ctx, long id) {
+	// mWorkingNote = WorkingNote.load(ctx, id);
+	// deleteCurrentNote();
+	// }
+	//
+	// private void deleteCurrentNote() {
+	// if (mWorkingNote.existInDatabase()) {
+	// HashSet<Long> ids = new HashSet<Long>();
+	// long id = mWorkingNote.getNoteId();
+	// if (id != Notes.ID_ROOT_FOLDER) {
+	// ids.add(id);
+	// } else {
+	// Log.d(TAG, "Wrong note id, should not happen");
+	// }
+	// if (!isSyncMode()) {
+	// if (!DataUtils.batchDeleteNotes(getContentResolver(), ids)) {
+	// Log.e(TAG, "Delete Note error");
+	// }
+	// } else {
+	// if (!DataUtils.batchMoveToFolder(getContentResolver(), ids,
+	// Notes.ID_TRASH_FOLER)) {
+	// Log.e(TAG,
+	// "Move notes to trash folder error, should not happens");
+	// }
+	// }
+	// WizSQLite.addDeletedInfo(this, id);
+	// }
+	// mWorkingNote.markDeleted(true);
+	// }
+	//
+	// private boolean isSyncMode() {
+	// return NotesPreferenceActivity.getSyncAccountName(this).trim().length() >
+	// 0;
+	// }
+
 	public void onClockAlertChanged(long date, boolean set) {
 		/**
 		 * User could set clock to an unsaved note, so before setting the alert
@@ -912,6 +952,7 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 		if (WizGlobals.isEmptyString(currentText))
 			currentText = "";
 		mWorkingNote.setWorkingText(currentText);
+
 		return hasChecked;
 	}
 
@@ -930,4 +971,57 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 		}
 		return saved;
 	}
+	//
+	// private void sendToDesktop() {
+	// /**
+	// * Before send message to home, we should make sure that current editing
+	// * note is exists in databases. So, for new note, firstly save it
+	// */
+	// if (!mWorkingNote.existInDatabase()) {
+	// saveNote();
+	// }
+	//
+	// if (mWorkingNote.getNoteId() > 0) {
+	// Intent sender = new Intent();
+	// Intent shortcutIntent = new Intent(this, NoteEditActivity.class);
+	// shortcutIntent.setAction(Intent.ACTION_VIEW);
+	// shortcutIntent.putExtra(Intent.EXTRA_UID, mWorkingNote.getNoteId());
+	// sender.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+	// sender.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+	// makeShortcutIconTitle(mWorkingNote.getContent()));
+	// sender.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+	// Intent.ShortcutIconResource.fromContext(this,
+	// R.drawable.icon_app));
+	// sender.putExtra("duplicate", true);
+	// sender.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+	// WizGlobals.showMessage(this, R.string.info_note_enter_desktop,
+	// false);
+	// sendBroadcast(sender);
+	// } else {
+	// /**
+	// * There is the condition that user has input nothing (the note is
+	// * not worthy saving), we have no note id, remind the user that he
+	// * should input something
+	// */
+	// Log.e(TAG, "Send to desktop error");
+	// WizGlobals.showMessage(this,
+	// R.string.error_note_empty_for_send_to_desktop, false);
+	// }
+	// }
+	//
+	// private String makeShortcutIconTitle(String content) {
+	// content = content.replace(WizGlobals.TAG_CHECKED, "");
+	// content = content.replace(WizGlobals.TAG_UNCHECKED, "");
+	// return content.length() > WizGlobals.SHORTCUT_ICON_TITLE_MAX_LEN ?
+	// content
+	// .substring(0, WizGlobals.SHORTCUT_ICON_TITLE_MAX_LEN) : content;
+	// }
+
+	// private void showToast(int resId) {
+	// showToast(resId, Toast.LENGTH_SHORT);
+	// }
+	//
+	// private void showToast(int resId, int duration) {
+	// Toast.makeText(this, resId, duration).show();
+	// }
 }
