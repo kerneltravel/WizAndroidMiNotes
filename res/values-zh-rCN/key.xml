@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="system_settings_checkbox">systemSettingsCheckBox</string>
+	<string name="system_settings_password">systemSettingsPassword</string>
+	<string name="auto_sync_checkbox">autoSyncCheckBox</string>
+	<string name="download_type_list_preference">downloadTypeListPreference</string>
+	<string name="system_set_show_note_way_list_preference">systemSetShowNoteWayListPreference</string>
+	<string name="system_set_show_layout_way_list_preference">systemSetShowLayoutWayListPreference</string>
+	
+	<string name="widget_select_account">widgetSelectAccount</string>
+</resources>
