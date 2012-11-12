@@ -43,11 +43,6 @@ public class WizSync extends WizXmlRpcThread {
 			if (null == mApi.callClientLogin())
 				return false;
 		}
-		// if (!isStopingSync()) {
-		// // mApi.sendSyncMessage(R.string.wait_for_login, "");
-		// if (null == mApi.callGetCert())
-		// return false;
-		// }
 		// 同步服务器端删除文件列表
 		if (!isStopingSync()) {
 			mApi.sendSyncMessage(R.string.download_deleted_document_list, "");
@@ -63,28 +58,6 @@ public class WizSync extends WizXmlRpcThread {
 					.getAllDeletedGuid(mContext)))
 				return false;
 		}
-		//
-		// // 同步服务器端的目录
-		// if (!isStopingSync()) {
-		// // mApi.sendSyncMessage(R.string.download_location_list, "");
-		// if (null == mApi.callAllCategories())
-		// return false;
-		// }
-		//
-		// // 同步服务器端修改、新建的标签
-		// if (!isStopingSync()) {
-		// // mApi.sendSyncMessage(R.string.download_tag_list, "");
-		// long tagVersion = WizIndex.getTAGVersion(mContext, mAccountUserId);
-		// if (null == mApi.callAllTags(tagVersion))
-		// return false;
-		// }
-		//
-		// // 同步上传本地新建、修改的标签
-		// if (!isStopingSync()) {
-		// // mApi.sendSyncMessage(R.string.upload_tag_list, "");
-		// if (null == mApi.callUploadTags())
-		// return false;
-		// }
 
 		/* 查询最大的文档version；用以同步服务器端文档的修改列表 */
 		if (!isStopingSync()) {
@@ -100,30 +73,6 @@ public class WizSync extends WizXmlRpcThread {
 			if (!uploadDocumentData())
 				return false;
 		}
-		/* 查询最大的附件version；用以同步服务器端附件的修改列表 */
-		// if (!isStopingSync()) {
-		// mApi.sendSyncMessage(R.string.download_attachment_list, "");
-		// long attachmentVersion = WizIndex.getAttachmentVersion(mContext,
-		// mAccountUserId);
-		// if (null == mApi.callAllAttachments(attachmentVersion))
-		// return false;
-		// }
-		//
-		// if (!isStopingSync()) {
-		// mApi.sendSyncMessage(R.string.upload_attachment_list, "");
-		// 同步上传附件数据
-		// if (!uploadAttachmentData())
-		// return false;
-		// }
-		// if (!isStopingSync()) {
-		// // 判断wifi是否打开
-		// if (mWifiActivity && mWifiOnlyDownLoad != mWifiDownloadNone) {
-		// // mApi.sendSyncMessage(R.string.upload_document_by_wifi, "");
-		//
-		// downloadAllData();
-		// }
-		// }
-		//
 		return true;
 	}
 
@@ -154,11 +103,11 @@ public class WizSync extends WizXmlRpcThread {
 
 		for (int i = 0; i < documents.size(); i++) {
 			WizDocument doc = documents.get(i);
-
 			if (isStopingSync())
 				break;
 
 			mApi.sendSyncMessage(R.string.upload_data, doc.title);
+
 			if (null == mApi.uploadDocument(doc))
 				return false;
 		}
@@ -167,31 +116,11 @@ public class WizSync extends WizXmlRpcThread {
 
 	static final String data_doc_type = "document";
 	static final String data_att_type = "attachment";
-	// private boolean uploadAttachmentData() {
-	// ArrayList<WizAttachment> attachments = WizIndex
-	// .getAttachmentsForUpdate(mContext, mAccountUserId);
-	// //
-	// for (int i = 0; i < attachments.size(); i++) {
-	// WizAttachment att = attachments.get(i);
-	// // 这里获取的类型文件会导致音频无法上传
-	// String orgFileName = WizIndex.getAttachmentOrgFileName(mContext,
-	// mAccountUserId, att.docGuid, att.name);
-	// //
-	// if (isStopingSync())
-	// break;
-	// // mApi.sendSyncMessage(R.string.upload_data, att.name);
-	// if (null == mApi.uploadAttachment(att, orgFileName))
-	// return false;
-	// }
-	// //
-	// return true;
-	// }
 
 	private final static int mWifiDownloadAllData = -1;
 	private final static int mWifiDownloadNone = 0;
 	private final static int mWifiDownloadRecentData = 1;
 
-	// 下载所有数据
 	private void downloadAllData() {
 		try {
 			ArrayList<String> arr = new ArrayList<String>();
@@ -213,11 +142,6 @@ public class WizSync extends WizXmlRpcThread {
 					String documentGUID = arr.get(i);
 					WizDocument doc = WizIndex.documentFromGUID(mContext,
 							mAccountUserId, documentGUID);
-					// String mDownloasMessage = doc.title + "  (" + (i + 1) +
-					// "/"
-					// + arrLength + ")  " + ":0%";
-					// mApi.sendSyncMessage(R.string.download_document,
-					// mDownloasMessage);
 					if (null == mApi.downloadDocument(doc))
 						continue;
 

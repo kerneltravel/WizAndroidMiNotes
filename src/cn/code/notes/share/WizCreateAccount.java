@@ -7,6 +7,9 @@ public class WizCreateAccount extends WizXmlRpcThread {
 
 	public WizCreateAccount(Context ctx, String accountUserId, String password,
 			boolean mIsPhone) {
+		/*
+		 * WizCreateAccount 动作类型为创建账户
+		 */
 		super(ctx, accountUserId, password, "WizCreateAccount");
 		isPhone = mIsPhone;
 	}

@@ -3,7 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="@drawable/background_new_account_activity_shape"
+	android:background="@drawable/list_background"
 	>
 	<LinearLayout 
 		android:layout_width="fill_parent" 
@@ -11,7 +11,7 @@
 		android:orientation="vertical" 
 		android:layout_gravity="center"
 		android:gravity="center_horizontal"
-		android:background="@drawable/background_new_account_activity_shape">	
+		android:background="@drawable/list_background">	
 		<ImageView
 			android:id="@+id/logoImage"
 			android:layout_height="wrap_content"

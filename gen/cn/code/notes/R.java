@@ -169,8 +169,8 @@ public final class R {
         public static final int loginButton=0x7f0d0006;
         public static final int loginLinearLayout=0x7f0d0002;
         public static final int logoImage=0x7f0d0009;
-        public static final int lv_item_time=0x7f0d0043;
-        public static final int lv_search_item=0x7f0d0042;
+        public static final int lv_item_time=0x7f0d0044;
+        public static final int lv_search_item=0x7f0d0043;
         public static final int menu_alert=0x7f0d0050;
         public static final int menu_delete=0x7f0d004b;
         public static final int menu_delete_remind=0x7f0d0051;
@@ -207,7 +207,7 @@ public final class R {
         public static final int tv_folder_name=0x7f0d0018;
         public static final int tv_modified_date=0x7f0d001c;
         public static final int tv_name=0x7f0d003a;
-        public static final int tv_search_title=0x7f0d0044;
+        public static final int tv_search_title=0x7f0d0042;
         public static final int tv_time=0x7f0d003c;
         public static final int tv_title=0x7f0d003b;
         public static final int tv_title_bar=0x7f0d003d;
@@ -234,11 +234,12 @@ public final class R {
         public static final int note_list=0x7f03000f;
         public static final int note_list_dropdown_menu=0x7f030010;
         public static final int note_list_footer=0x7f030011;
-        public static final int search_note_item=0x7f030012;
-        public static final int search_note_list=0x7f030013;
-        public static final int sms_item=0x7f030014;
-        public static final int widget_2x=0x7f030015;
-        public static final int widget_4x=0x7f030016;
+        public static final int search_list_head=0x7f030012;
+        public static final int search_note_item=0x7f030013;
+        public static final int search_note_list=0x7f030014;
+        public static final int sms_item=0x7f030015;
+        public static final int widget_2x=0x7f030016;
+        public static final int widget_4x=0x7f030017;
     }
     public static final class menu {
         public static final int call_note_edit=0x7f0c0000;

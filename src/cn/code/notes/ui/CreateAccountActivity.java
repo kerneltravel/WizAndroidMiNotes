@@ -33,7 +33,6 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 
 		setOnClickListener();
 
-		//
 		WizApiEventsListener.add(this);
 	}
 
@@ -56,9 +55,8 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 	void setOnClickListener() {
 		// 设置按钮的基本信息
 		setButtonInfo();
-		// 监听按钮
+		// 点击创建按钮的监听事件
 		getCreateButton().setOnClickListener(new View.OnClickListener() {
-
 			public void onClick(View v) {
 				save();
 			}
@@ -81,7 +79,7 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 		return null;
 	}
 
-	//
+	// 保存用户注册输入信息
 	public void save() {
 		String userId = getUserId();
 		String password = getPassword();
@@ -104,13 +102,10 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 					.showMessage(this, R.string.password_does_not_match, true);
 			return;
 		}
-		//
 		showDialog(DIALOG_WAIT);
-		//
-
+		
 		WizCreateAccount verify = new WizCreateAccount(this, getUserId(),
 				getPassword(), WizGlobals.isPhone(this));
-		//
 		verify.start();
 	}
 
@@ -142,7 +137,6 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 		String editAccountUserId = ((EditText) findViewById(R.id.editTextUserID))
 				.getText().toString();
 		if (editAccountUserId.indexOf(" ") != -1) {
-
 			editAccountUserId = getUserId(editAccountUserId);
 		}
 		return editAccountUserId;
@@ -171,16 +165,12 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 	}
 
 	public void onApiEnd(String userId, String actionName, boolean succeeded) {
-		//
 		if (!getUserId().equals(userId)
 				|| !actionName.equals(WizGlobals.ActionNameForCreate))
 			return;
-		//
 		removeDialog(DIALOG_WAIT);
-		//
 		if (succeeded) {
 			String id = getUserId();
-			//
 			WizSQLite.updateAccountUserId(this, id);
 			WizSQLite.updateAccountPassword(this, getPassword());
 			setResult(1);
@@ -190,11 +180,9 @@ public class CreateAccountActivity extends Activity implements WizApiEvents {
 
 	public void onApiError(String userId, String actionName, int stringID,
 			String errorMessage) {
-		//
 		if (!getUserId().equals(userId)
 				|| !actionName.equals(WizGlobals.ActionNameForCreate))
 			return;
-		//
 		mLastErrorMessage = WizGlobals.getErrorMessage(this, stringID,
 				errorMessage);
 		if (stringID != -1)

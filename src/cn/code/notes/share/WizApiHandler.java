@@ -2,9 +2,10 @@ package cn.code.notes.share;
 
 import java.util.ArrayList;
 
+import android.os.Handler;
 import android.os.Message;
 
-public class WizApiHandler extends android.os.Handler {
+public class WizApiHandler extends Handler {
 	protected String mAccountUserId;
 	protected String mActionName;
 

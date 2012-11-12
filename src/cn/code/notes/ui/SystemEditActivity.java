@@ -24,7 +24,6 @@ public class SystemEditActivity extends PreferenceActivity implements
 	public static final String PREFERENCE_SYNC_ACCOUNT_KEY = "pref_sync_account_key";
 
 	public Preference mAccountPreference;
-
 	private boolean isCancel = false;
 	private String mAccountUserId = "";
 
@@ -34,7 +33,6 @@ public class SystemEditActivity extends PreferenceActivity implements
 
 		addPreferencesFromResource(R.xml.system_edit);
 		mAccountPreference = (Preference) findPreference(PREFERENCE_SYNC_ACCOUNT_NAME);
-
 		WizApiEventsListener.add(this);
 	}
 
@@ -101,50 +99,6 @@ public class SystemEditActivity extends PreferenceActivity implements
 		}
 	}
 
-	// private void loadSyncMessage(String message) {
-	// TextView lastSyncTimeView = (TextView)
-	// findViewById(R.id.prefenerece_sync_status_textview);
-	// lastSyncTimeView.setVisibility(View.GONE);
-	//
-	// if (isSyncing() && !WizGlobals.isEmptyString(message)) {
-	// lastSyncTimeView.setText(message);
-	// lastSyncTimeView.setVisibility(View.VISIBLE);
-	// } else {
-	// long lastSyncTime = getLastSyncTime(this);
-	// if (lastSyncTime != 0) {
-	// lastSyncTimeView.setText(getString(
-	// R.string.preferences_last_sync_time,
-	// WizGlobals.getCurrentSQLDateTimeString(lastSyncTime)));
-	// lastSyncTimeView.setVisibility(View.VISIBLE);
-	// } else {
-	// }
-	// }
-	// lastSyncTimeView.setVisibility(View.GONE);
-	// }
-
-	// private void loadSyncButton() {
-	// Button syncButton = (Button) findViewById(R.id.preference_sync_button);
-	// syncButton.setVisibility(View.GONE);
-	// if (isSyncing()) {
-	// syncButton
-	// .setText(getString(R.string.preferences_button_sync_cancel));
-	//
-	// } else {
-	// syncButton
-	// .setText(getString(R.string.preferences_button_sync_immediately));
-	// }
-	// syncButton.setOnClickListener(new View.OnClickListener() {
-	// public void onClick(View v) {
-	// if (WizGlobals.isEmptyString(mAccountUserId))
-	// mAccountUserId = WizSQLite
-	// .getAccountUserId(SystemEditActivity.this);
-	// sync();
-	// }
-	// });
-	// syncButton.setEnabled(!isEmptyAccount());
-	// loadSyncMessage("");
-	// }
-
 	private void freshUI() {
 		mAccountUserId = getSyncAccountName(this);
 		loadAccountPreference();
@@ -158,12 +112,6 @@ public class SystemEditActivity extends PreferenceActivity implements
 		editor.putLong(PREFERENCE_LAST_SYNC_TIME, time);
 		editor.commit();
 	}
-
-	// private static long getLastSyncTime(Context context) {
-	// SharedPreferences settings = context.getSharedPreferences(
-	// PREFERENCE_NAME, Context.MODE_PRIVATE);
-	// return settings.getLong(PREFERENCE_LAST_SYNC_TIME, 0);
-	// }
 
 	public static String getSyncAccountName(Context context) {
 		return WizSQLite.getAccountUserId(context);

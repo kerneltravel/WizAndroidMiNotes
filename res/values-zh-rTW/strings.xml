@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="search_title">為您搜索到%1$s條符合關鍵字“%2$s”的便籤</string>
+    <string name="search_title">搜索到%1$s條符合關鍵字“%2$s”的便籤</string>
     <string name="sms">短信</string>
     <string name="app_name">便簽</string>
     <string name="app_widget2x2">便簽2x2</string>
@@ -156,8 +156,8 @@
     <string name="wait_for_login">正在登錄，請稍候...</string>
     <string name="message_enter_user_id">請輸入帳號!</string>
     <string name="message_enter_password">請輸入密碼!</string>
-    <string name="message_enter_confirm_password">請再次輸入密碼</string>
-    <string name="password_does_not_match">兩次密碼不一致!</string>
+    <string name="message_enter_confirm_password">請輸入確認密碼!</string>
+    <string name="password_does_not_match">您輸入的密碼不匹配!</string>
     <string name="create_new_account">創建新的帳號</string>
     <string name="account_with_cerate">註冊</string>
     <string name="wiz_button_back">返回</string>

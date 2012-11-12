@@ -18,7 +18,6 @@ public class WelcomeActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_welcome);
 		getLoginButton().setOnClickListener(this);
 		getCreateButton().setOnClickListener(this);
-		//
 	}
 
 	@Override

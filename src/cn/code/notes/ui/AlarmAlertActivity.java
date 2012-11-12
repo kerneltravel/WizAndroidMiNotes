@@ -37,7 +37,6 @@ import java.io.IOException;
 import cn.code.notes.data.Notes;
 import cn.code.notes.tool.DataUtils;
 
-
 public class AlarmAlertActivity extends Activity implements OnClickListener,
 		OnDismissListener {
 	private long mNoteId;
@@ -50,18 +49,8 @@ public class AlarmAlertActivity extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		// final Window win = getWindow();
-		// win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-
-		// if (!isScreenOn()) {
-		// win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-		// | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-		// | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
-		// | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR);
-		// }
-
 		Intent intent = getIntent();
-
+		
 		try {
 			mNoteId = Long.valueOf(intent.getData().getPathSegments().get(1));
 			mSnippet = DataUtils.getSnippetById(this.getContentResolver(),
@@ -74,7 +63,7 @@ public class AlarmAlertActivity extends Activity implements OnClickListener,
 			e.printStackTrace();
 			return;
 		}
-
+		
 		mPlayer = new MediaPlayer();
 		if (DataUtils.visibleInNoteDatabase(getContentResolver(), mNoteId,
 				Notes.TYPE_NOTE)) {
@@ -85,10 +74,6 @@ public class AlarmAlertActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	// private boolean isScreenOn() {
-	// PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-	// return pm.isScreenOn();
-	// }
 
 	private void playAlarmSound() {
 		Uri url = RingtoneManager.getActualDefaultRingtoneUri(this,
@@ -127,9 +112,6 @@ public class AlarmAlertActivity extends Activity implements OnClickListener,
 		dialog.setTitle(R.string.app_name);
 		dialog.setMessage(mSnippet);
 		dialog.setPositiveButton(R.string.notealert_ok, this);
-		// if (isScreenOn()) {
-		// dialog.setNegativeButton(R.string.notealert_enter, this);
-		// }
 		dialog.show().setOnDismissListener(this);
 	}
 

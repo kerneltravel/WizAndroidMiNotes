@@ -10,13 +10,11 @@ import cn.code.notes.share.WizSQLite;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -179,6 +177,7 @@ public class WizAccountCreateActivity extends Activity implements WizApiEvents {
 
 		WizCreateAccount verify = new WizCreateAccount(this, getUserId(),
 				getPassword(), WizGlobals.isPhone(this));
+		//
 		verify.start();
 
 	}
@@ -186,21 +185,7 @@ public class WizAccountCreateActivity extends Activity implements WizApiEvents {
 	OnClickListener onBackButtonClick = new OnClickListener() {
 
 		public void onClick(View v) {
-			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
-					.hideSoftInputFromWindow(WizAccountCreateActivity.this
-							.getCurrentFocus().getWindowToken(),
-							InputMethodManager.HIDE_NOT_ALWAYS);
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			overridePendingTransition(android.R.anim.slide_in_left,
-					android.R.anim.fade_out);
 			finish();
-
 		}
 	};
 
@@ -246,15 +231,6 @@ public class WizAccountCreateActivity extends Activity implements WizApiEvents {
 		if (!WizGlobals.isEmptyString(mLastErrorMessage))
 			showDialog(DIALOG_ERROR);
 		clearEditText();
-	}
-
-	@Override
-	public void onBackPressed() {
-
-		overridePendingTransition(android.R.anim.slide_in_left,
-				android.R.anim.fade_out);
-		finish();
-		super.onBackPressed();
 	}
 
 }

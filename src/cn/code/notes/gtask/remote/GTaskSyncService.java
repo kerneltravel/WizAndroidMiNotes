@@ -100,7 +100,7 @@ public class GTaskSyncService extends Service {
 		intent.putExtra(GTASK_SERVICE_BROADCAST_PROGRESS_MSG, msg);
 		sendBroadcast(intent);
 	}
-
+	
 	public static void startSync(Activity activity) {
 		GTaskManager.getInstance().setActivityContext(activity);
 		Intent intent = new Intent(activity, GTaskSyncService.class);

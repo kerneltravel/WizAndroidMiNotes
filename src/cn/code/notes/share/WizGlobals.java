@@ -34,7 +34,9 @@ import cn.code.notes.data.Notes;
 import cn.code.notes.data.NoteColumnsInterface.DeletedColumns;
 import cn.code.notes.data.NoteColumnsInterface.NoteColumns;
 import cn.code.notes.model.WorkingNote;
+import cn.code.notes.model.WorkingNote.NoteSettingChangedListener;
 import cn.code.notes.tool.DataUtils;
+import cn.code.notes.ui.AlarmReceiver;
 import cn.code.notes.ui.NoteEditActivity;
 import cn.code.notes.ui.SystemEditActivity;
 
@@ -45,10 +47,13 @@ import redstone.xmlrpc.zip.ZipFile;
 import redstone.xmlrpc.zip.ZipOutputStream;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -66,7 +71,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-public class WizGlobals {
+public class WizGlobals implements NoteSettingChangedListener {
 
 	public static final String DATA_EXTRAS_STRING_PATH = "notePath";
 	public static final String DATA_INFO_TYPE_DOCUMENT = "document";
@@ -779,6 +784,26 @@ public class WizGlobals {
 		out.close();
 	}
 
+	private static void saveAlertTimeToFile(String alertTimeFileName,
+			String alertTime) {
+		try {
+			String path = extractFilePath(alertTimeFileName);
+			String name = extractFileName(alertTimeFileName);
+
+			java.io.File file = new java.io.File(path, name);
+			FileOutputStream out = new FileOutputStream(file);
+			OutputStreamWriter writer = new OutputStreamWriter(out);
+			writer.write(alertTime);
+			writer.flush();
+			writer.close();
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void addUTF8Head(String charset, FileOutputStream out) {
 		if (charset.equals("utf-8") || charset.equals("UTF-8")) {
 			byte[] b = { (byte) 0xef, (byte) 0xbb, (byte) 0xbf };
@@ -826,7 +851,7 @@ public class WizGlobals {
 			return java.io.File.separator;
 		if (path.length() == 0)
 			return java.io.File.separator;
-		//
+
 		char ch = path.charAt(path.length() - 1);
 		if (ch == '/' || ch == '\\')
 			return path;
@@ -1363,10 +1388,9 @@ public class WizGlobals {
 			CheckedOutputStream cos = new CheckedOutputStream(
 					new FileOutputStream(zipFile), new CRC32());
 			out = new ZipOutputStream(cos);
-			File files[] = srcFile.listFiles();
+			File[] files = srcFile.listFiles();
 			if (files != null && files.length > 0) {
 				for (int i = 0; i < files.length; i++) {
-
 					Zip(files[i], out, "", true);
 				}
 			}
@@ -1405,7 +1429,7 @@ public class WizGlobals {
 			File[] listFile = file.listFiles();// 得出目录下所有的文件对象
 			if (listFile.length == 0 && boo) {// 空目录压缩
 				out.putNextEntry(new ZipEntry(dir + file.getName() + "/"));// 将实体放入输出ZIP流中
-				System.out.println("压缩." + dir + file.getName() + "/");
+				// System.out.println("压缩." + dir + file.getName() + "/");
 				return;
 			} else {
 				for (File cfile : listFile) {
@@ -1413,12 +1437,12 @@ public class WizGlobals {
 				}
 			}
 		} else if (file.isFile()) {// 是文件
-			System.out.println("压缩." + dir + file.getName() + "/");
+			// System.out.println("压缩." + dir + file.getName() + "/");
 			byte[] bt = new byte[2048 * 2];
 			ZipEntry ze = new ZipEntry(dir + file.getName());// 构建压缩实体
-			// 设置压缩前的文件大小
 			ze.setSize(file.length());
-			out.putNextEntry(ze);// //将实体放入输出ZIP流中
+			// 设置压缩前的文件大小
+			out.putNextEntry(ze);// 将实体放入输出ZIP流中
 			FileInputStream fis = null;
 			try {
 				fis = new FileInputStream(file);
@@ -2200,7 +2224,7 @@ public class WizGlobals {
 			is.read(b);
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 		} finally {
 
@@ -2237,7 +2261,9 @@ public class WizGlobals {
 	}
 
 	static public String loadTextFromFile(String docName) {
-
+		if (!fileExists(docName)) {
+			return "0";
+		}
 		try {
 			if (isFileUTF16(docName))
 				return loadTextFromFile(docName, "UTF-16");
@@ -2248,7 +2274,7 @@ public class WizGlobals {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "";
+		return "0";
 	}
 
 	// 摘要的字数长度
@@ -2798,35 +2824,46 @@ public class WizGlobals {
 
 	public static boolean noteToHtml(Context mContext, String selection,
 			String[] selectionArgs, String fileName, String title) {
-
 		try {
+
 			String text = WizSQLite.getHtmlText(mContext, selection,
 					selectionArgs);
+
+			// 将内容转化为Html格式
 			String html = text2Html(text, title);
+			// 保存到文件
 			saveTextToFile(fileName, html, "utf-8");
+
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
 
-	public static boolean alert2Txt() {
-		return false;
+	private static void alertTimeToTxt(Context mContext, String selection,
+			String[] selectionArgs, String alertTimeFileName) {
+
+		String alertTime = WizSQLite.getAlertTime(mContext, selection,
+				selectionArgs);
+		saveAlertTimeToFile(alertTimeFileName, alertTime);
 	}
 
 	static public File getDocZipFile(Context mContext, String mAccountUserId,
 			WizDocument data) {
 
-		if (data == null)
+		if (data == null) {
 			return null;
+		}
 
-		String dataOrgFileName = WizGlobals.getNoteHtmlFileName(mContext);
-
+		// 保存便签内容的文件名
+		String dataOrgFileName = getNoteHtmlFileName(mContext);
+		// 保存提醒时间的文件名
+		String alertTimeFileName = WizGlobals.getAlertTimeFileName(mContext);
 		String guid = data.guid;
-
+		// 得到压缩文件名
 		String zipFileName = getZipFile(mContext, guid);
-		File zipFile = new File(zipFileName);
 
+		File zipFile = new File(zipFileName);
 		String newFolderName = getUpdateFolderFile(mContext, guid);
 		File newFolder = new File(newFolderName);
 
@@ -2838,14 +2875,23 @@ public class WizGlobals {
 					dataOrgFileName, data.title))
 				return null;
 
-			alert2Txt();
+			alertTimeToTxt(mContext, selection, selectionArgs,
+					alertTimeFileName);
 
 			int fileNameIndex = dataOrgFileName.lastIndexOf("/");
 			String fileName = dataOrgFileName.substring(fileNameIndex + 1);
 			String newFileName = WizGlobals.pathAddBackslash(newFolderName)
 					+ fileName;
 
+			int alertTimeFileIndex = alertTimeFileName.lastIndexOf("/");
+			String alertTimeFileName1 = alertTimeFileName
+					.substring(alertTimeFileIndex + 1);
+			String newAlertTimeFileName = WizGlobals
+					.pathAddBackslash(newFolderName) + alertTimeFileName1;
+
 			WizGlobals.copyFile(dataOrgFileName, newFileName);
+			WizGlobals.copyFile(alertTimeFileName, newAlertTimeFileName);
+
 			WizGlobals.ZipByApache(newFolder, zipFile);
 
 		} catch (FileNotFoundException e) {
@@ -2858,6 +2904,11 @@ public class WizGlobals {
 			WizGlobals.deleteDirectory(newFolderName);
 		}
 		return zipFile;
+	}
+
+	private static String getAlertTimeFileName(Context mContext) {
+		String filePath = getWizTaskPath(mContext);
+		return pathAddBackslash(filePath) + "alertTime.txt";
 	}
 
 	static String getNoteHtmlFileName(Context mContext) {
@@ -2874,7 +2925,6 @@ public class WizGlobals {
 		String basePath = WizGlobals.getDataRootPath(mContext);
 		String zip_file_name = WizGlobals.pathAddBackslash(basePath) + guid
 				+ ".zip";
-
 		return zip_file_name;
 	}
 
@@ -2970,10 +3020,61 @@ public class WizGlobals {
 	public static boolean saveNote(Context mContext, WizDocument doc) {
 		String docFileName = getNoteHtmlFileName(mContext, doc.guid);
 		String html = loadTextFromFile(docFileName);
+
+		String alertTimeFileName = getAlertTimeFileName(mContext, doc.guid);
+
+		String alertTime = loadTextFromFile(alertTimeFileName);
+		alertTime = alertTime.replaceAll("\n", "");
 		String text = html2Text(html, 0);
-		if (isEmptyString(text))
+		return saveNote(mContext, doc, text, alertTime);
+	}
+
+	private static boolean saveNote(Context mContext, WizDocument doc,
+			String text, String alertTime) {
+		if (WizGlobals.isEmptyString(text))
 			text = "";
-		return saveNote(mContext, doc, text);
+		String guid = doc.guid;
+		String location = doc.location;
+		location = getLocation(location, false);
+		WorkingNote mWorkingNote;
+		long noteId = 0;
+		noteId = WizSQLite.getNoteIdFromConnect(mContext, guid);
+		if (noteId > 0) {
+			mWorkingNote = WorkingNote.load(mContext, noteId);
+		} else {
+			long folderId = createFolder(mContext, location, 0);
+			mWorkingNote = WorkingNote.createEmptyNote(mContext, folderId, 0,
+					0, 0);
+		}
+		mWorkingNote.iniContentValues(guid, doc.title, doc.dateCreated,
+				doc.dateModified, doc.type, doc.fileType, location,
+				doc.attachmentCount, doc.tagGUIDs);
+		mWorkingNote.setWorkingText(text);
+		long newAlertTime = Long.parseLong(alertTime);
+		mWorkingNote.setAlertDate(newAlertTime, true);
+		boolean boo = mWorkingNote.saveNote();
+		if (newAlertTime > System.currentTimeMillis()) {
+			sendBroadCast(mWorkingNote, mContext, newAlertTime);
+		}
+		return boo;
+	}
+
+	@SuppressWarnings("static-access")
+	private static void sendBroadCast(WorkingNote mWorkingNote,
+			Context mContext, long newAlertTime) {
+		Intent intent = new Intent(mContext, AlarmReceiver.class);
+		intent.setData(ContentUris.withAppendedId(Notes.CONTENT_NOTE_URI,
+				mWorkingNote.getNoteId()));
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
+				intent, 0);
+		AlarmManager alarmManager = ((AlarmManager) mContext
+				.getSystemService(mContext.ALARM_SERVICE));
+		alarmManager.set(AlarmManager.RTC_WAKEUP, newAlertTime, pendingIntent);
+	}
+
+	private static String getAlertTimeFileName(Context mContext, String guid) {
+		String docFilePath = getWizTaskCurrentPath(mContext, guid);
+		return pathAddBackslash(docFilePath) + "alertTime.txt";
 	}
 
 	public static ContentValues iniDeletedContentValues(String guid) {
@@ -3070,6 +3171,30 @@ public class WizGlobals {
 		content = content.replace(TAG_UNCHECKED, "");
 		return content.length() > SHORTCUT_ICON_TITLE_MAX_LEN ? content
 				.substring(0, SHORTCUT_ICON_TITLE_MAX_LEN) : content;
+	}
+
+	@Override
+	public void onBackgroundColorChanged() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onClockAlertChanged(long date, boolean set) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onWidgetChanged() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCheckListModeChanged(int oldMode, int newMode) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
